@@ -1,0 +1,131 @@
+Basic queries 
+    SELECT - indicates which columns to return 
+    FROM - which table to query
+
+    SELECT employee_id, device_id
+        FROM employees;
+
+NOTE: TO END A QUERY, PUT A (;)SEMICOLON AT END TO TELL SQL THAT THIS IS THE ENTIRE QUERY    
+
+    * = all columns from table
+        SELECT * 
+        FROM employees;
+        (retuns  all columns from employees table)
+
+    ORDER BY - sequences records returned based on a specified column or columns
+        SELECT customerid, city, country
+        FROM customers
+        ORDER BY city;
+
+     DESC - changes sorting order / descending order
+        SELECT customerid, city, country
+        FROM customers
+        ORDER BY city DESC;
+
+     Sorting based on multiple columns
+        SELECT customerid, city, country
+        FROM customers
+        ORDER BY country, city;   
+        (sorts by country, then for rows with the same country it sorts those by city)
+
+Basic filters 
+    WHERE - indicates condition for a filter 
+        SELECT * 
+        FROM log_in_attempts
+        WHERE country = 'USA'; (only return those contain 'USA'. it uses = operator)
+
+    LIKE - used with where and % to search for pattern 
+        SELECT * 
+        FROM log_in_attempts
+        WHERE country LIKE "US%";
+
+    % - substitutes for any number of chars 
+    _ - subsittutes for only 1 char
+
+Common data types 
+    string 
+    numeric 
+    date and time 
+
+Operators 
+    = 
+    >
+    <
+    <> or != (not equal to)
+    >=
+    <=
+
+    SELECT * 
+    FROM log_in_attempts
+    WHERE time > '18:00';
+
+Note: Place time data in single quotation marks
+
+    BETWEEN - operator that filters # of dates within a range 
+        SELECT * 
+        FROM machines 
+        WHERE OS_patch_date BETWEEN '2021-03-01' AND '2021-09-01';
+
+        inclusive of specified dates
+
+Filters with AND, OR, NOT
+    AND - both conditions must be met 
+        SELECT * 
+        FROM machines 
+        WHERE operating_system = 'OS 1' AND email_client = 'Email Client 1';
+
+    OR - either condition can be met 
+        SELECT * 
+        FROM machines 
+        WHERE operating_system = 'OS 1' OR operating_system = 'OS 3';
+
+    NOT - negates a condition, only works on a single condition
+        SELECT * 
+        FROM machines 
+        WHERE NOT operating_system = 'OS 3';
+
+        (WHERE country <> 'USA' and WHERE country != 'USA' are the same filters as WHERE NOT country = 'USA')
+
+
+Combining Logical Functions
+        SELECT firstname, lastname, email, country
+        FROM customers
+        WHERE NOT country = 'Canada' AND NOT country = 'USA';
+
+Note: Even though both conditions are based on the same column, you need to write out both full conditions. This means that you must specify country as the column in both conditions.
+
+
+Join tables 
+    INNER JOIN - returns rows matching on a specified column that exists in more than one table 
+        resulting table will include rows that contain matching values on selected column
+(Specify 2 tables to join by including 1st(left) table after FROM and 2nd(right) table after INNER JOIN. After name of right table use 'ON' and '=' to indicate column you are joining the tables on. Specify table and column by placing (.)period between table and column)
+
+        SELECT username, office, operating_system
+        FROM employees 
+        INNER JOIN machines ON employees.employee_id = machines.employee_id;
+
+        Note: If a column exists in both of the tables, it is returned twice when SELECT * is used.
+
+        SELECT username, operating_system, employees.device_id
+        FROM  employees
+        INNER JOIN machines ON employees.device_id = machines.device_id;
+Note: In the example, username and operating_system only appear in one of the two tables, so they are written with just the column name. On the other hand, because device_id appears in both tables, it's necessary to indicate which one to return by specifying both the table and column name (employees.device_id).
+            
+
+Outer joins 
+        LEFT JOIN - returns all records of first table but only returns rows from the second table that match specified column 
+        RIGHT JOIN - returns all records of second table but only returns rows from the first table that match specified column 
+        FULL OUTER JOIN - returns all records from both tables  
+
+Aggregate functions 
+    COUNT - number of rows
+    AVG - average
+    SUM - sum
+
+    place keyword after SELECT:
+        SELECT COUNT(firstname)
+        FROM customers;
+
+    SELECT COUNT(firstname)
+    FROM customers
+    WHERE country = 'USA';
